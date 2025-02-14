@@ -18,19 +18,15 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 
 // CLI arguments schema
 const ArgsSchema = z.object({
-  minStars: z.coerce.number().default(0),
-  maxStars: z.coerce.number().default(0),
-  maxResults: z.coerce.number().default(0),
+  minStars: z.coerce.number().default(100),
+  maxStars: z.coerce.number().default(1_000_000),
+  maxResults: z.coerce.number().default(100),
   since: z.coerce.date().default(() => {
     const date = new Date()
     date.setHours(0, 0, 0, 0)
     return date
   }),
-  until: z.coerce.date().default(() => {
-    const date = new Date()
-    date.setHours(23, 59, 59, 999)
-    return date
-  }),
+  until: z.coerce.date().optional(),
 })
 
 async function fetchRepos() {
@@ -58,9 +54,13 @@ async function fetchRepos() {
         )
       `)
       .gte('createdAt', args.since.toISOString())
-      .lte('createdAt', args.until.toISOString())
       .order('starCountChange', { ascending: false })
       .limit(args.maxResults)
+
+    // Add until date filter if provided
+    if (args.until) {
+      query = query.lte('createdAt', args.until.toISOString())
+    }
 
     // Add star count filters if provided
     if (args.minStars > 0 && args.maxStars > 0) {
