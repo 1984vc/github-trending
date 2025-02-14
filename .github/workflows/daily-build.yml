@@ -10,6 +10,8 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     environment: production
+    permissions:
+      deployments: write
 
     steps:
       - uses: actions/checkout@v4
@@ -35,7 +37,7 @@ jobs:
         env:
           # Add any environment variables needed by fetch-repos script
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
 
       - name: Build site
         run: pnpm build
