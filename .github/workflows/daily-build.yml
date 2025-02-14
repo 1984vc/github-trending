@@ -1,6 +1,9 @@
 name: Daily Build and Deploy
 
 on:
+  push:
+    branches:
+      - main
   schedule:
     # 8am ET is 13:00 UTC
     - cron: '0 13 * * *'
