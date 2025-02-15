@@ -8,7 +8,9 @@ function App() {
       <main className="w-full max-w-xl px-4 py-8 sm:px-8">
         <img src={logo} alt="1984 Logo" className="w-24 h-24 mx-auto mb-6" />
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2 text-center">GitHub Trending Repos</h1>
-        <p className="text-gray-600 dark:text-gray-400 mb-8 text-center">For February 14, 2025</p>
+        <p className="text-gray-600 dark:text-gray-400 mb-8 text-center">
+          For {new Date(repos[0].createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+        </p>
         <RepoList repos={repos} />
       </main>
     </div>
